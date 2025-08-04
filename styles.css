@@ -96,10 +96,10 @@ h4 {
 /* ===============
    Header Section
 ================ */
+
 header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background-color: var(--primary-color);
   color: var(--primary-font-color);
   height: 96px;
@@ -109,10 +109,11 @@ header {
   font-size: 1.875rem;
   font-weight: 600;
 }
-
+h2#header-board-name.header-board-name {
+  margin-right: 570px;
+}
 .header-name-div {
   display: flex;
-  align-items: center;
 }
 
 .logo-mobile {
