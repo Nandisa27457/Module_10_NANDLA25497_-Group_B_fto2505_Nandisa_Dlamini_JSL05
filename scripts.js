@@ -1,4 +1,4 @@
-import { initialTasks } from "./initialData.js";
+import { savedTasks } from "./tasks.js";
 
 /**
  * An object mapping task statuses to their corresponding task container elements in the DOM.
@@ -28,7 +28,7 @@ const columns = {
  * Loops through each task in the initialTasks array and performs an operation on it.
  */
 
-initialTasks.forEach((task) => {
+savedTasks.forEach((task) => {
   const taskDiv = document.createElement("div"); // Created a div within the task container
   taskDiv.textContent = task.title; // Adding the title text into the created div
   taskDiv.dataset.description = task.description; //Adding task description
@@ -86,3 +86,28 @@ document.querySelectorAll(".task-div").forEach((taskDiv) => {
 closeBtn.addEventListener("click", () => {
   modal.classList.add("hidden");
 });
+/*Render function to ensure task is populated from localStorage*/
+
+// Export renederTasks
+export function renderTasks() {
+  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+  const columns = {
+    todo: document.querySelector('[data-status="todo"] .tasks-container'),
+    doing: document.querySelector('[data-status="doing"] .tasks-container'),
+    done: document.querySelector('[data-status="done"] .tasks-container'),
+  };
+
+  // Clear all columns before re-rendering
+  Object.values(columns).forEach((column) => (column.innerHTML = ""));
+
+  // Add each task to its correct column
+  tasks.forEach((task) => {
+    const taskDiv = document.createElement("div");
+    taskDiv.classList.add("task-div");
+    taskDiv.textContent = task.title;
+    taskDiv.setAttribute("data-id", task.id); // useful for click/edit
+
+    columns[task.status]?.appendChild(taskDiv);
+  });
+}
