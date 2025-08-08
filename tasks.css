@@ -7,12 +7,11 @@ button#new-task-btn {
   border-radius: 24px;
 }
 
-
 /*============
 New Task Modal
 ==============*/
 
-.new-modal{
+.new-modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -28,8 +27,8 @@ New Task Modal
 .new-modal-content {
   background: white;
   padding: 20px;
-  width: 600px;
-  height: 415px;
+  width: 479px;
+  height: 479px;
   border-radius: 8px;
   position: relative;
   display: flex;
@@ -38,7 +37,7 @@ New Task Modal
 }
 
 .hidden {
-  display:none ;
+  display: none;
 }
 
 .close-btn {
@@ -86,3 +85,13 @@ span.close-btn {
   color: #ea5555;
   font-size: 35px;
 }
+
+button{
+    background-color: #635FC7;
+    color: white;
+    height:40px;
+    border-radius:20px;
+    border:none;
+    font-size: 13px;
+}
+
