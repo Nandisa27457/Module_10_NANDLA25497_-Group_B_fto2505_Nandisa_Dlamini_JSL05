@@ -86,9 +86,8 @@ document.querySelectorAll(".task-div").forEach((taskDiv) => {
 closeBtn.addEventListener("click", () => {
   modal.classList.add("hidden");
 });
-/*Render function to ensure task is populated from localStorage*/
 
-// Export renederTasks
+//Render tasks function to refresh HTML and add the current tasks and new task together on DOM.
 export function renderTasks() {
   const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
@@ -98,15 +97,17 @@ export function renderTasks() {
     done: document.querySelector('[data-status="done"] .tasks-container'),
   };
 
-  // Clear all columns before re-rendering
-  Object.values(columns).forEach((column) => (column.innerHTML = ""));
+  // Clear all tasks
+  Object.values(columns).forEach((column) => {
+    column.innerHTML = "";
+  });
 
-  // Add each task to its correct column
+  // Render tasks in correct column
   tasks.forEach((task) => {
     const taskDiv = document.createElement("div");
     taskDiv.classList.add("task-div");
     taskDiv.textContent = task.title;
-    taskDiv.setAttribute("data-id", task.id); // useful for click/edit
+    taskDiv.setAttribute("data-id", task.id);
 
     columns[task.status]?.appendChild(taskDiv);
   });
