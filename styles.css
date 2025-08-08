@@ -259,6 +259,11 @@ input#taskTitle {
   height: 40px;
 }
 
+input::placeholder,
+textarea::placeholder {
+  color: #88888871; /* Light grey placeholder */
+}
+
 textarea#taskDescription {
   border-style: solid;
   border-color: #828da372;
