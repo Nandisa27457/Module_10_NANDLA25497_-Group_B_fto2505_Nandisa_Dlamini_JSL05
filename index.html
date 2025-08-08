@@ -21,9 +21,6 @@
       type="image/png"
       sizes="32x32"
       href="./assets/favicon.svg" />
-    <script
-      defer
-      src="./scripts.js"></script>
     <title>Kanban Task Management</title>
   </head>
 
@@ -164,11 +161,15 @@
         <label for="taskTitle">Title</label>
         <input
           type="text"
+          placeholder=" e.g.Take chilled break."
           id="taskTitle" />
 
         <label for="taskDescription">Description</label>
         <textarea
           id="taskDescription"
+          placeholder="e.g Pet your dog, have a cup of coffee, 
+dance to your favourite song and come 
+back to crush this challenge."
           rows="3"></textarea>
 
         <label for="taskStatus">Status</label>
@@ -183,6 +184,9 @@
     <!-- Renders tasks and connects events -->
     <script
       type="module"
-      src="scripts.js"></script>
+      src="./scripts.js"></script>
+    <script
+      type="module"
+      src="./addTasks.js"></script>
   </body>
 </html>
