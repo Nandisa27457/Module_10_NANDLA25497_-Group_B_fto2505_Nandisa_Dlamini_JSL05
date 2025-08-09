@@ -96,10 +96,10 @@ h4 {
 /* ===============
    Header Section
 ================ */
-
 header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: var(--primary-color);
   color: var(--primary-font-color);
   height: 96px;
@@ -109,11 +109,10 @@ header {
   font-size: 1.875rem;
   font-weight: 600;
 }
-h2#header-board-name.header-board-name {
-  margin-right: 570px;
-}
+
 .header-name-div {
   display: flex;
+  align-items: center;
 }
 
 .logo-mobile {
@@ -204,94 +203,154 @@ h2#header-board-name.header-board-name {
   font-weight: bold;
 }
 
+/*Add Task button*/
+
+#open-add-task-btn {
+  background-color: #635fc7;
+  color: #ffffff;
+  width: 164px;
+  height: 48px;
+  border: none;
+  border-radius: 24px;
+}
+
+h2#header-board-name.header-board-name {
+  margin-right: 570px;
+}
+
 /* ===============
    Headings
 ================ */
 h2 {
   font-size: 1.5rem;
   margin: 0;
+  margin-top:20px;
 }
-/* ==========
-  Modal styling
-  ===============*/
-.modal {
+
+/* ===============
+   Modal Styles
+================ */
+/* Remove default dialog styles */
+#task-modal{
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: none;
+  overflow: hidden;
+  width:479px;
+  height:479px;
 }
 
-.modal-content {
-  background: white;
-  padding: 20px;
-  width: 600px;
-  height: 415px;
+/* Style the modal box */
+#task-modal::backdrop {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+#add-task-modal.modal{
+  width:479px;
+  height:430px;
+  border:none;
+  border-radius:5px;
+  overflow:hidden;
+}
+
+button{
+   background-color: #635FC7;
+    color: white;
+    height:40px;
+    border-radius:20px;
+    border:none;
+    font-size: 13px;
+    width:455px;
+}
+#task-modal {
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -40%);
   border-radius: 8px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  width: 90%;
+  max-width: 600px;
+  padding: 24px;
+  background-color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  /*font-family: "Plus Jakarta Sans", sans-serif;*/
 }
 
-.hidden {
-  display: none;
+/* Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
 }
 
 .close-btn {
-  position: absolute;
-  right: 12px;
-  top: 12px;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  line-height: 1;
   cursor: pointer;
-  font-size: 18px;
-}
-
-input#taskTitle {
-  border-style: solid;
-  border-color: #828da372;
-  border-width: 1px;
-  border-radius: 7px;
-  height: 40px;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #88888871; /* Light grey placeholder */
-}
-
-textarea#taskDescription {
-  border-style: solid;
-  border-color: #828da372;
-  border-width: 1px;
-  height: 113px;
-  border-radius: 7px;
-}
-
-select#taskStatus {
-  border-style: solid;
-  border-color: #828da372;
-  border-width: 1px;
-  color: black;
-  position: relative;
-  height: 40px;
-  border-radius: 7px;
-}
-
-label {
-  color: #828fa3;
-  font-family: Plus Jakarta Sans;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-span.close-btn {
   color: #ea5555;
-  font-size: 35px;
+  transition: transform 0.2s ease-in-out, font-weight 0.2s ease-in-out;
+  transition-delay: 0.1s; /* Delay before scaling */
+  position:relative;
+  left:200px;
+  bottom:25px;
+}
+
+.close-btn:hover {
+  transform: scale(1.15);
+  font-weight: 600;
+}
+
+.close-btn:focus {
+  outline: none;
+}
+
+/* Form elements */
+form label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.75em;
+  margin-top: 12px;
+  margin-bottom: 4px;
+  color: #828fa3;
+  
+}
+
+/*Label styling for new modal*/
+
+label.status{
+  margin-bottom:20px;
+}
+
+
+
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #828fa3;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.8125em;
+  resize: vertical;
+}
+
+form select {
+  appearance: none; /* Remove native arrow */
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="%23828FA3" stroke-width="3" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>')
+    no-repeat right 0.75rem center;
+
+  background-size: 1.4rem;
+  padding-right: 1rem;
 }
 
 /* ========================
@@ -373,11 +432,6 @@ span.close-btn {
   .column-div {
     width: 100%;
   }
-
-  .modal-content {
-    width: 500px;
-    height: 500px;
-  }
 }
 
 /******** Mobile ********/
@@ -393,10 +447,37 @@ span.close-btn {
     padding: 24px;
   }
 
-  /*Modal Media Query*/
+  #add-task-modal.modal{
+    width:343px;
 
-  .modal-content {
-    width: 343px;
-    height: 343px;
+  }
+  button{
+    width: 329px;
+    position:relative;
+    right:9px;
+
+  }
+
+  h2#header-board-name.header-board-name{
+    display: none;
+  }
+
+  span.new-task-text{
+    display:none;
+  }
+  
+  button#open-add-task-btn{
+    width:33px;
+    height:33px;
+
+  }
+
+  img.logo-mobile{
+    margin-right: 445px;
+  }
+
+  .close-btn{
+    position:relative;
+    left:130px;
   }
 }
