@@ -1,114 +1,131 @@
-import { savedTasks } from "./tasks.js";
+import { initialTasks } from "./initialData.js";
+
+let tasks = JSON.parse(localStorage.getItem("tasks")) || initialTasks;
 
 /**
- * An object mapping task statuses to their corresponding task container elements in the DOM.
- *
- * Each key (`todo`, `doing`, `done`) represents a task status, and its value is the `<div>` element
- * where tasks of that status should be displayed.
- *
- * @type {{
- *   todo: HTMLDivElement
- *   doing: HTMLDivElement
- *   done: HTMLDivElement
- * }}
+ * Creates a single task DOM element.
  */
+function createTaskElement(task) {
+  const taskDiv = document.createElement("div");
+  taskDiv.className = "task-div";
+  taskDiv.textContent = task.title;
+  taskDiv.dataset.taskId = task.id;
 
-//Selecting the relevant status containers.
-const columns = {
-  todo: document.querySelector('[data-status="todo"] .tasks-container'),
-  doing: document.querySelector('[data-status="doing"] .tasks-container'),
-  done: document.querySelector('[data-status="done"] .tasks-container'),
-};
-
-/**
- * Loops through the initialTasks array and renders each task
- * in the appropriate column based on its status. Adds a click
- */
-/**
- * Loops through each task in the initialTasks array and performs an operation on it.
- */
-
-savedTasks.forEach((task) => {
-  const taskDiv = document.createElement("div"); // Created a div within the task container
-  taskDiv.textContent = task.title; // Adding the title text into the created div
-  taskDiv.dataset.description = task.description; //Adding task description
-  taskDiv.classList.add("task-div"); //adding the class to the div that is styled in the CSS file.
-
-  //if statement to match the task to its respective status matching the fetched columns.
-  if (columns[task.status]) {
-    columns[task.status].appendChild(taskDiv); //Appending the status to the right column.
-  }
-});
-
-//=======
-//Modal
-//=======
-
-/** @type {HTMLDivElement} 
-const modal = document.getElementById("modal");
-/** @type {HTMLInputElement} 
-const taskTitleInput = document.getElementById("taskTitleInput");
-/** @type {HTMLTextAreaElement} 
-const taskDescriptionInput = document.getElementById("taskDescriptionInput");
-/** @type {HTMLSelectElement} 
-const taskStatusSelect = document.getElementById("taskStatusSelect");
-*/
-
-//Select form and modal input from DOM.
-const modal = document.getElementById("taskModal");
-const taskTitleInput = document.getElementById("taskTitle");
-const taskDescriptionInput = document.getElementById("taskDescription");
-const taskStatusSelect = document.getElementById("taskStatus");
-const closeBtn = document.querySelector(".close-btn");
-
-/**
- * Handles the click event on a task to open the modal
- * and populate it with the task's details.
- */
-//Event listener for tasks
-document.querySelectorAll(".task-div").forEach((taskDiv) => {
   taskDiv.addEventListener("click", () => {
-    taskTitleInput.value = taskDiv.textContent; //Ensure task title input includes relevant task content
-    taskDescriptionInput.value = taskDiv.dataset.description; // Ensure description matches task.
-
-    //Select status that applies to the column of the relevant task
-    const parentColumn = taskDiv
-      .closest(".column-div")
-      .getAttribute("data-status");
-    taskStatusSelect.value = parentColumn; //find parent first column that has the task clicked.
-
-    //Remove hidden styling on CSS
-    modal.classList.remove("hidden");
-  });
-});
-
-// Close modal
-closeBtn.addEventListener("click", () => {
-  modal.classList.add("hidden");
-});
-
-//Render tasks function to refresh HTML and add the current tasks and new task together on DOM.
-export function renderTasks() {
-  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-  const columns = {
-    todo: document.querySelector('[data-status="todo"] .tasks-container'),
-    doing: document.querySelector('[data-status="doing"] .tasks-container'),
-    done: document.querySelector('[data-status="done"] .tasks-container'),
-  };
-
-  // Clear all tasks
-  Object.values(columns).forEach((column) => {
-    column.innerHTML = "";
+    openTaskModal(task);
   });
 
-  // Render tasks in correct column
-  tasks.forEach((task) => {
-    const taskDiv = document.createElement("div");
-    taskDiv.classList.add("task-div");
-    taskDiv.textContent = task.title;
-    taskDiv.setAttribute("data-id", task.id);
+  return taskDiv;
+}
 
-    columns[task.status]?.appendChild(taskDiv);
+/**
+ * Finds the task container element based on task status.
+ */
+function getTaskContainerByStatus(status) {
+  const column = document.querySelector(`.column-div[data-status="${status}"]`);
+  return column ? column.querySelector(".tasks-container") : null;
+}
+
+/**
+ * Clears all existing task-divs from all task containers.
+ */
+function clearExistingTasks() {
+  document.querySelectorAll(".tasks-container").forEach((container) => {
+    container.innerHTML = "";
   });
 }
+
+/**
+ * Renders all tasks.
+ */
+function renderTasks(tasksArray) {
+  clearExistingTasks();
+  tasksArray.forEach((task) => {
+    const container = getTaskContainerByStatus(task.status);
+    if (container) {
+      const taskElement = createTaskElement(task);
+      container.appendChild(taskElement);
+    }
+  });
+}
+
+/**
+ * Opens the modal dialog with pre-filled task details.
+ */
+function openTaskModal(task) {
+  const modal = document.getElementById("task-modal");
+  const titleInput = document.getElementById("task-title");
+  const descInput = document.getElementById("task-desc");
+  const statusSelect = document.getElementById("task-status");
+
+  titleInput.value = task.title;
+  descInput.value = task.description;
+  statusSelect.value = task.status;
+
+  modal.showModal();
+}
+
+/**
+ * Sets up modal close behavior.
+ */
+function setupModalCloseHandler() {
+  document.querySelectorAll("#close-modal-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.target.closest("dialog").close();
+    });
+  });
+}
+
+/**
+ * Saves tasks array to localStorage.
+ */
+function saveTasksToLocalStorage() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+/**
+ * Handles adding a new task from the modal form.
+ */
+function setupAddTaskFormHandler() {
+  const addTaskForm = document.getElementById("add-task-form");
+
+  addTaskForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const title = document.getElementById("new-task-title").value.trim();
+    const description = document.getElementById("new-task-desc").value.trim();
+    const status = document.getElementById("new-task-status").value;
+
+    if (!title) {
+      alert("Task title is required!");
+      return;
+    }
+
+    const newTask = {
+      id: Date.now(), // unique ID
+      title,
+      description,
+      status,
+    };
+
+    tasks.push(newTask);
+    saveTasksToLocalStorage();
+    renderTasks(tasks);
+
+    // Reset form & close modal
+    addTaskForm.reset();
+    document.getElementById("add-task-modal").close();
+  });
+}
+
+/**
+ * Initializes the task board.
+ */
+function initTaskBoard() {
+  renderTasks(tasks);
+  setupModalCloseHandler();
+  setupAddTaskFormHandler();
+}
+
+// Wait until DOM is fully loaded
+document.addEventListener("DOMContentLoaded", initTaskBoard);
