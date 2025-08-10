@@ -100,9 +100,10 @@ function setupAddTaskFormHandler() {
       alert("Task title is required!");
       return;
     }
-
+    const nextId =
+      tasks.length > 0 ? Math.max(...tasks.map((t) => t.id)) + 1 : 1;
     const newTask = {
-      id: Date.now(), // unique ID
+      id: nextId, // unique ID
       title,
       description,
       status,
